@@ -1,9 +1,9 @@
 # Instituto Federal de Educação, Ciência e Tecnologia do Rio Grande do Norte.
 
-```Turma:``` 2° período - TADS 2023.1
-```Professor:``` Robinson Luis de Souza Alves
-```Disciplina:``` Estrutura de Dados Lineares
-```Aluna:``` Livia Vitória Da Silva
+- `Turma:` 2° período - TADS 2023.1
+- `Professor:` Robinson Luis de Souza Alves
+- `Disciplina:` Estrutura de Dados Lineares
+- `Aluna:` Livia Vitória Da Silva
 
 
 
