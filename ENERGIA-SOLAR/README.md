@@ -19,25 +19,25 @@ Existe um número de casas em uma rua. Cada casa tem uma planta de geração de 
 
 P={3, 6, 2, 7, 5} // produção das casas em uma rua
 
-**Passo 1** - Determinar casas da primeira linha de força
+- **Passo 1** - Determinar casas da primeira linha de força
 linha de força 1 - {6,2,5}
-**Passo 2** - Determinar casas da segunda linha de força
+- **Passo 2** - Determinar casas da segunda linha de força
 Linha de força 2 - {7}
-**Passo 3** - Determinar casas da terceira linha de força
+- **Passo 3** - Determinar casas da terceira linha de força
 Linha de força 3 - {3}
 
-*Nesse exemplo, foram necessárias 3 linhas de força para resolver o problema da rua P.*
+* *Nesse exemplo, foram necessárias 3 linhas de força para resolver o problema da rua P.*
 
 **Ex2.:**
 
 P={8,6,10,4,1,5,3} // produção das casas em uma rua
 
-**Passo 1** - Determinar casas da primeira linha de força
+- **Passo 1** - Determinar casas da primeira linha de força
 linha de força 1 - {8,6,4,1,3}
-**Passo 2** - Determinar casas da segunda linha de força
+- **Passo 2** - Determinar casas da segunda linha de força
 Linha de força 2 - {10,5}
 
-*Nesse exemplo, foram necessárias 2 linhas de força para resolver o problema da rua P.*
+* *Nesse exemplo, foram necessárias 2 linhas de força para resolver o problema da rua P.*
 
 ## Requisitos funcionais da TAD Pilha:
 1. Desenvolva uma versão com array utilizando a estratégia de duplicação em caso de enchimento do array.
