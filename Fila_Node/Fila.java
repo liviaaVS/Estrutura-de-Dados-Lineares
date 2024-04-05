@@ -3,5 +3,5 @@ public interface Fila {
     public boolean isEmpty();
     public Object Dfileirar() throws FilaVaziaExcecao;
     public void fileirar (Object o);
-    public Object Init() throws FilaVaziaExcecao;
+    public Object first() throws FilaVaziaExcecao;
 }

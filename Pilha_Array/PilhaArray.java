@@ -25,7 +25,7 @@ public class PilhaArray implements Pilha {
 
     @Override
     public Object top() throws PilhaVaziaExcecao {
-        // TODO Auto-generated method stub
+        if(isEmpty()) throw new PilhaVaziaExcecao("Pilha está vazia");
         return this.array[size()-1];
 
     }
@@ -55,7 +55,7 @@ public class PilhaArray implements Pilha {
 
     @Override
     public Object pop() throws PilhaVaziaExcecao {
-        // TODO Auto-generated method stub
+        if(isEmpty()) throw new PilhaVaziaExcecao("Pilha está vazia");
         Object e = this.array[size()-1];
         this.array[size()-1] = null;
         this.size -=1;
