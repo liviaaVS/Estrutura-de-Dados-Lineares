@@ -1,5 +1,3 @@
-import javax.swing.text.html.parser.Element;
-
 public class VetorArray implements Vetor{
     public int size = 0;
     public Object[] array = null;
