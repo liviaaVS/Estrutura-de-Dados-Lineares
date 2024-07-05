@@ -105,6 +105,11 @@ public class TesteVetor {
             System.out.println("Vetor apos a remocao do final: " + vetor.toString());
             System.out.println("Elemento: " + vetor.removeAtRank(0) + " foi removido do inicio");
             System.out.println("Vetor apos a remocao do inicio: " + vetor.toString());
+            System.out.println("Elemento: " + vetor.removeAtRank(0) + " foi removido do inicio");
+            System.out.println("Vetor apos a remocao do inicio: " + vetor.toString());
+            System.out.println("Elemento: " + vetor.removeAtRank(0) + " foi removido do inicio");
+            System.out.println("Vetor apos a remocao do inicio: " + vetor.toString());
+        
         } catch (IndiceInvalido e) {
             System.out.println("Erro durante a remocao: Indice invalido");
         }

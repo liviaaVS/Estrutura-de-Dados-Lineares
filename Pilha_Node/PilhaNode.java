@@ -27,11 +27,11 @@ public class PilhaNode implements Pilha {
 
     @Override
     public void push(Object o) {
-        Node newNode = new Node();
-        if(isEmpty()){
-            this.inicio =  newNode;
-            inicio.setValue(o);
-            this.fim = this.inicio;
+        Node newNode = new Node(); // criando novo no a ser inserido 
+        if(isEmpty()){ // verificando se está vazio, pois a inserção muda quando se insere no começo
+            this.inicio =  newNode; // definindo o novo No como o inicio
+            inicio.setValue(o); // adicionando o valor do ao novo no
+            this.fim.setValue(this.inicio); // como é o comedo
             this.size++;
         }else{
             newNode.setValue(o);
