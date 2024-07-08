@@ -1,9 +1,11 @@
+
+
 public class TesteLista {
     
 
 
 public static void main(String[] args) {
-    TADLista<String> lista = new TADLista<>();
+    ListaNode lista = new ListaNode();
 
     // Testando métodos genéricos
     System.out.println("A lista está vazia? " + lista.isEmpty());
