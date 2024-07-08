@@ -76,11 +76,15 @@ public class TesteVetor {
     private static void testInsertion(VetorNode vetor) {
         System.out.println("Teste de insercao:");
         try {
+    
             vetor.insertAtRank(0, 10);
             vetor.insertAtRank(1, 20);
             vetor.insertAtRank(2, 30);
             vetor.insertAtRank(2, 5);
             vetor.insertAtRank(2, 2);
+            vetor.insertAtRank(0, 80);
+            vetor.inicio();
+
             System.out.println("Vetor: " + vetor.toString());
         } catch (IndiceInvalido e) {
             System.out.println("Erro durante a insercao: Indice invalido");

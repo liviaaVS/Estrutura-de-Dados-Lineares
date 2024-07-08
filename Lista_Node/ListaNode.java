@@ -9,153 +9,161 @@ public class ListaNode implements Lista{
         this.size = 0;
     }
     @Override
-    public int size(){
+    public int size(){ // O(1)
         return this.size;
     }
     @Override
-    public boolean  isEmpty(){
+    public boolean  isEmpty(){ // O(1)
         return size() == 0;
     }
     @Override
-    public boolean isFirst(int p) {
-        return p == 0;
+    public boolean isFirst(Node p) { // O(1)
+        return p.getValue() == this.inicio.getValue();
     }
     @Override
-    public boolean isLast(int p) {
-        return p == size() -1;
+    public boolean isLast(Node p) { // O(1)
+        return p.getValue() == this.fim.getValue();
     }
     @Override
-    public int first() {
-        if (isEmpty()) {
+    public Node first() { // O(1)
+        if (isEmpty()) { 
             throw new ListaVaziaExcecao("Lista está vazia");
         }else{
-            return 0;
+            return this.inicio;
         }
     }
     @Override
-    public int last() {
+    public Node last() { // O(1)
         if (isEmpty()) {
             throw new ListaVaziaExcecao("Lista está vazia");
         }else{
-            return size()-1;
+            return this.fim;
 
         }
     }
     @Override
-    public Object replaceElement(int n, Object o) {
-            Node no = getElement(n);
-            Object e = no.getValue();
-            no.setValue(o);
-            return e ; 
+    public Object replaceElement(Node n, Object o) { // O(1)
+        Object e = n.getValue();    
+        n.setValue(o);
+        return e;
     }
 
-    private void checkPosition(int p){
+
+    private Node getElement(Object e){   // O(n) Implementei mas acabei não usando
+        if(!isEmpty()){
+            Node current = this.inicio;
+            while(current.getValue() != e){
+                current = current.getProximo();
+            }
+            return current; 
+        }else{
+            return null;
+        }   
+    }
+
+    @Override
+    public void swapElements(Node n , Node q) { // O(1)
+        Object temp =  n.getValue();
+        n.setValue(q.getValue());
+        q.setValue(temp);
+    }
+
+    // corrigir daqui para baixo
+    @Override
+    public Node insertBefore(Node n, Object o) { // O(1)
         if(isEmpty()){
-            throw new ListaVaziaExcecao("A lista está vazia. ");
-        }else  if(p > size() || p < 0){
-            throw new PosicaoInvalida(p + " - Posição inválida");
+            throw new ListaVaziaExcecao("Lista Vazia.");
+        }else{
+            if(isFirst(n)){
+                throw new PosicaoInvalida("Não é possível inserir antes do início");
+            }else{
+                Node new_no = new Node();
+                new_no.setValue(o);
+                Node current  = n;
+                new_no.setProximo(current);
+                current.getAnterior().setProximo(new_no);
+                current.setAnterior(new_no);
+
+                this.size++;
+                return new_no;
+            }
         }
-        
     }
-
-
-    private Node getElement(int p){   
-        checkPosition(p);
-        Node current = this.inicio;
-        for(int x=0; x<=p;x++){
-            current = current.getProximo();
+    @Override
+    public Node insertAfter(Node n, Object o) { // O(1)
+        if(isEmpty()){
+            throw new ListaVaziaExcecao("Lista Vazia.");
+        }else{
+            if(isLast(n)){
+                throw new PosicaoInvalida("Não é possível inserir depois do fim");
+            }else{
+                Node new_no = new Node();
+                new_no.setValue(o);
+                Node current  = n;
+                new_no.setAnterior(current);
+                current.getProximo().setAnterior(new_no);
+                new_no.setProximo(current.getProximo());
+                current.setProximo(new_no);
+                this.size++;
+                return new_no;
+            }
         }
-        return current;        
     }
 
     @Override
-    public void swapElements(int n, int q) {
-
-        Node e1 = getElement(q); 
-        Node e2 = getElement(n);
-
-        Object temp =  e1.getValue();
-        e1.setValue(e2.getValue());
-        e2.setValue(temp);
-    }
-
-    @Override
-    public int insertBefore(int n, Object o) {
-        checkPosition(n);
-    
-        Node new_no = new Node();
-        new_no.setValue(o);
-        Node current  = getElement(before(n));
-        new_no.setAnterior(current);
-        new_no.setProximo(current.getProximo());
-        current.getProximo().setAnterior(new_no);
-        current.setProximo(new_no);
-
+    public Node insertFirst(Object o) { // O(1)
+        Node n = new Node();
+        n.setValue(o);
+        if (isEmpty()) {
+            this.inicio = n;
+            this.fim = n;
+        } else {
+            this.inicio.setAnterior(n);
+            n.setProximo(this.inicio);
+            this.inicio = n;
+        }
         this.size++;
-        return n;
-    }
-    @Override
-    public int insertAfter(int n, Object o) {
-        checkPosition(n);
-    
-        Node new_no = new Node();
-        new_no.setValue(o);
-        Node current  = getElement(after(n));
-        new_no.setProximo(current);
-        new_no.setAnterior(current.getAnterior());
-        current.getAnterior().getProximo().setProximo(new_no);
-      
-
-        this.size++;
-       return n+1;
-    }
-
-    @Override
-    public int insertFirst(Object o) {
-        Node new_no = new Node();
-        inicio.setAnterior(new_no);
-        new_no.setProximo(inicio);
-        new_no.setValue(o);
-        this.inicio = new_no;
-        this.size++;
-        return 0;
+        return this.inicio;
     }
     
+    
     @Override
-    public int insertLast(Object o){
-        Node novoNo = new Node();
-        novoNo.setValue(o);
+    public Node insertLast(Object o){ // O(1)
+        Node new_no = new Node();
+        new_no.setValue(o);
         if(this.fim != null){
             // Pegando o último nó existente
-            novoNo.setAnterior(this.fim);
-            this.fim.setProximo(novoNo);
-            this.fim = novoNo; // atualiza o último nó para o nov nó criado
+            new_no.setAnterior(this.fim);
+            this.fim.setProximo(new_no);
+            this.fim = new_no; // atualiza o último nó para o nov nó criado
         }else{
-            this.fim = novoNo;
+            this.fim = new_no;
             this.inicio = this.fim;
         }
         this.size++;
 
-        return this.size()-1;
+        return new_no ;
     }
     @Override
-    public int before(int n) {
+    public Node before(Node n) { // O(1)
         if(isFirst(n)){
             throw new PosicaoInvalida("Não existe posição anterior ao primeiro.");
        }else{
-        return n-1;
+        return n.getAnterior();
        }
     }
     @Override
-    public int after(int n) {
-        if(isFirst(n)){
-            throw new PosicaoInvalida("Não existe posição anterior ao primeiro.");
+    public Node after(Node n) {
+        if(isLast(n)){
+            throw new PosicaoInvalida("Não existe posição posterior ao fim.");
        }else{
-        return n-1;
+        return n.getProximo();
        }
     }
     
-    public String toString(){
+    
+
+    public String toString(){ // O(n)
         Node current = this.inicio;
         String vetor = "[";
         while(current != null){
@@ -165,6 +173,31 @@ public class ListaNode implements Lista{
             
         }
         return vetor +="]";
+    }
+    @Override
+    public Object remove(Node p) {
+        Object old_no = new Object();
+       if(isEmpty()){
+            throw new ListaVaziaExcecao("Lista Vazia.");
+       }else{
+        if(isFirst(p)){
+            old_no = this.inicio.getValue();
+            this.inicio = this.inicio.getProximo();
+            this.inicio.setAnterior(null);
+        }else
+        if(isLast(p)){
+            old_no = this.fim.getValue();
+            this.fim = this.fim.getAnterior();
+            this.fim.setProximo(null);
+        }else{
+            old_no = p.getValue();
+            p.getAnterior().setProximo(p.getProximo()); // o proximo do anterior agora é o meu próximo
+            p.getProximo().setAnterior(p.getAnterior()); // o anterior do proximo agora é o meu anterior
+
+        }
+
+        return  old_no;
+       }
     } 
 
 

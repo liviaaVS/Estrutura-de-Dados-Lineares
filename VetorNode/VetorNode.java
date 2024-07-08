@@ -15,7 +15,9 @@ public class VetorNode implements Vetor {
         return size() == 0;
     }
 
-
+    public void inicio(){
+        System.err.println(this.inicio.getValue());
+    }
     @Override
     public Node elemAtRank(int r) {
         if(r < 0 || r > size()) throw new IndiceInvalido("Indice inválido: " + r);
@@ -87,6 +89,14 @@ public class VetorNode implements Vetor {
             this.fim = inicio;   
             this.size++;
             
+        }else if (r == 0){
+            Node new_no = new Node();
+            inicio.setAnterior(new_no);
+            new_no.setProximo(inicio);
+            new_no.setValue(o);
+            this.inicio = new_no;
+            this.size++;
+
         } else if (r == size()) { // Trata a inserção no final da lista
             Node novoNo = new Node();
             novoNo.setValue(o);
