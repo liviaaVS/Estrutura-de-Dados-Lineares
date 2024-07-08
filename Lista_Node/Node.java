@@ -1,4 +1,3 @@
-package VetorNode;
 
 public class Node {
     public Object value =  (Integer) null;
