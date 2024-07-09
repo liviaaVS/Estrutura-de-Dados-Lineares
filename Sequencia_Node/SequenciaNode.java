@@ -16,12 +16,12 @@ public class SequenciaNode implements  Sequencia, Lista, Vetor{
 
     @Override
     public int size() {
-       return 0;
+       return this.size++;
     }
 
     @Override
     public boolean isEmpty() {
-        return size() ==0;
+        return size() == 0;
     }
 
     // METODOS DE PONTE - SEQUENCIA -------------------------------------------------------------------------------------------------------------------------------------------
@@ -51,16 +51,18 @@ public class SequenciaNode implements  Sequencia, Lista, Vetor{
 
     @Override
     public int rankOF(Node n) {
+        Node current = this.inicio;
+        System.err.println(this.size);
         int r = 0;
         if (isEmpty()) {
             throw new SequenciaVaziaExcecao("Sequencia vazia.");
         } else {
-            Node current = this.inicio;
-           while(current.getProximo() == null){
+           while(current.getProximo() != null ){
             if(n.getValue() == current.getValue()){
                 return r;
             }
             r++;
+            current = current.getProximo();
            }
             return -1;
         }
