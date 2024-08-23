@@ -34,7 +34,12 @@ public class HashTable {
     int pmt; // primo < tamanho
 
     public HashTable(int tamanho){
-        this.tamanho = tamanho;
+        this.tamanho = encontrar_pMt(tamanho);
+        this.usado = 0;
+        this.pmt = encontrar_pmt(this.tamanho);
+        this.dado = new Object[this.tamanho];
+
+
     }
 
     private int func_hash(Object o) {
@@ -42,8 +47,9 @@ public class HashTable {
         // Possibilidade de alterar a função de hashing para uma personalizada
     }
 
-    private int  re_hash(int x, int count){
-        return  ((x + (count*((x%tamanho-1)+pmt))) % tamanho ); 
+    private int  re_hash(Object o, int count){
+
+        return (count*(( func_indice(o) % this.tamanho-1)+this.pmt)); 
 
     }
     private int func_indice(Object o) {
@@ -89,7 +95,8 @@ public class HashTable {
         int indice = func_indice(obj);
         int count = 0;
         while (dado[indice] != obj)
-            indice = (indice + 1) % tamanho;
+            indice = (indice + re_hash(obj, count++)) % tamanho;
+        
         if (count == tamanho + 1)
             throw new  EDLVazioExcecao("Não existe esse elemento");
         return indice;
@@ -109,8 +116,9 @@ public class HashTable {
         }
         
         int indice = func_indice(o);
-        while (dado[indice] != null && dado[indice] != null) {
-            indice = (indice + 1) % tamanho;
+        int count =0;
+        while (dado[indice] != null) {
+            indice = (indice + re_hash(o, count++)) % tamanho;
         }
         
         if (dado[indice] == null || dado[indice] == null) {
@@ -127,10 +135,14 @@ public class HashTable {
 
     public Object removerchave(int chave) {
         usado--;
+        Object a = null;
         if (chave < tamanho) {
             Object x = dado[chave];
-            dado[chave] = null;
-            return x;
+            dado[chave] = a;
+            if(x == null) throw new PosicaoInvalida("Não possui um elemento.");
+            else
+                return x;
+        
         } else
             throw new EDLVazioExcecao("Errado");
     }
