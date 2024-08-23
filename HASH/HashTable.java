@@ -1,32 +1,17 @@
 
+
+
 public class HashTable {
-    public class Node {
-
-        public Object value = null;
-        public Node proximo = null;
-        public Node anterior =  null;
-        
-        public Node getAnterior() {
-            return anterior;
-        }
-        public void setAnterior(Node anterior) {
-            this.anterior = anterior;
-        }
-        public Object getValue() {
-            return value;
-        }
-        public void setValue(Object value) {
-            this.value = value;
-        }
-        public Node getProximo() {
-            return proximo;
-        }
-        public void setProximo(Node proximo) {
-            this.proximo = proximo;
-        }
-
-        
+    public class PosicaoInvalida extends RuntimeException {
+        public PosicaoInvalida(String err){
+           super(err);	
+        }   
     }
+    public class EDLVazioExcecao extends RuntimeException {
+        public EDLVazioExcecao(String err){
+           super(err);	
+        }   
+   }
    
     Object[] dado;
     int tamanho;
@@ -44,7 +29,6 @@ public class HashTable {
 
     private int func_hash(Object o) {
         return o.hashCode();
-        // Possibilidade de alterar a função de hashing para uma personalizada
     }
 
     private int  re_hash(Object o, int count){
