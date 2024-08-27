@@ -1,11 +1,118 @@
-public class arvore {
-    int size = 0; // quantidade de nos da arvore
-    //no pai 
-    // filho a esquerda
-    // filho a direita
-    // caminhamento em ordem
-    // visita o direito depois o pai depois o esquerdo
+
+import java.lang.classfile.components.ClassPrinter;
+import java.util.ArrayList;
+import java.util.List;
+
+public class Arvore {
+    
+    public class Node {
+        public Object value =  (Integer) null;
+        public Node filhoD = null;
+        public Node filhoE =  null;
+        public Node pai =  null;
+        public Object getValue() {
+            return value;
+        }
+        public void setValue(Object value) {
+            this.value = value;
+        }
+        public Node getFilhoD() {
+            return filhoD;
+        }
+        public void setFilhoD(Node filhoD) {
+            this.filhoD = filhoD;
+        }
+        public Node getFilhoE() {
+            return filhoE;
+        }
+        public void setFilhoE(Node filhoE) {
+            this.filhoE = filhoE;
+        }
+        public Node getPai() {
+            return pai;
+        }
+        public void setPai(Node pai) {
+            this.pai = pai;
+        }
+    
+       
+    
+        
+    }
+    
+    int size = 0; 
+    Node raiz = null; 
+
+    public int size(){
+        return this.size;
+    }
+    public int height(Node no) {
+        if (no == null) {
+            return -1; 
+        }
+    
+        int altura_direita = height(no.filhoD);
+        int altura_esquerda = height(no.filhoE); 
+    
+        return 1 + Math.max(altura_direita, altura_esquerda);
+    }
+    public int depth(Node no) {
+
+        if(isRoot(no)){
+            return 0;
+        }
+    
+        return 1 + depth(no.getPai());
+    }
+
+
+    public boolean isEmpty(){
+        return this.size == 0;
+    }
+    public boolean isInternal(Node no){
+        return no.getFilhoD() != null ||  no.getFilhoE() != null;
+    }
+    public boolean isExternal(Node no){
+        return no.getFilhoD() == null && no.getFilhoE() == null ;
+    }
+
+    public boolean isRoot(Node no){
+        return no.getValue() ==  this.raiz;
+    }
+
+
+    private void Preordem(Node n, List<Object> s) {
+        s.add(n.getValue());
+        if (n.getFilhoE() != null)
+            Preordem(n.getFilhoE(), s);
+        if (n.getFilhoD() != null)
+            Preordem(n.getFilhoD(), s);
+    }
+    private void Emordem(Node n, List<Object> s) {
+        if (n != null) {
+            Emordem(n.getFilhoE(), s);  
+            s.add(n.getValue());        
+            Emordem(n.getFilhoD(), s);  
+        }
+    }
+    
+    public List<Object> elements() {
+        List<Object> array = new ArrayList<>();
+        Preordem(raiz, array);
+        return array;
+    }
+
+
+
 }
+
+//no pai 
+// filho a esquerda
+// filho a direita
+// caminhamento em ordem
+// visita o direito depois o pai depois o esquerdo
+
+
 // ARVORE BINÁRIA
 // Filhos a esquerda são menores e filhos a direitas são maiores
 // remoção: remove de qualquer lugar
@@ -28,5 +135,5 @@ public class arvore {
 //     return 0  
 
 // }senao
-h=0
-para cara w em children(v)
+// h=0
+// para cara w em children(v)
