@@ -1,9 +1,16 @@
 
-import java.lang.classfile.components.ClassPrinter;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Array;
+
+
+
 
 public class Arvore {
+
+    private static class Array<T> {
+
+        public Array() {
+        }
+    }
     
     public class Node {
         public Object value =  (Integer) null;
@@ -34,9 +41,6 @@ public class Arvore {
         public void setPai(Node pai) {
             this.pai = pai;
         }
-    
-       
-    
         
     }
     
@@ -46,6 +50,7 @@ public class Arvore {
     public int size(){
         return this.size;
     }
+
     public int height(Node no) {
         if (no == null) {
             return -1; 
@@ -81,14 +86,14 @@ public class Arvore {
     }
 
 
-    private void Preordem(Node n, List<Object> s) {
+    private void Preordem(Node n, Array<Object> s) {
         s.add(n.getValue());
         if (n.getFilhoE() != null)
             Preordem(n.getFilhoE(), s);
         if (n.getFilhoD() != null)
             Preordem(n.getFilhoD(), s);
     }
-    private void Emordem(Node n, List<Object> s) {
+    private void Emordem(Node n, Array<Object> s) {
         if (n != null) {
             Emordem(n.getFilhoE(), s);  
             s.add(n.getValue());        
@@ -96,9 +101,9 @@ public class Arvore {
         }
     }
     
-    public List<Object> elements() {
-        List<Object> array = new ArrayList<>();
-        Preordem(raiz, array);
+    public Array<Object> elements() {
+        Array<Object> array = new Array<Object>();
+        Emordem(raiz, array);
         return array;
     }
 
