@@ -1,3 +1,4 @@
+package Hash_Array;
 
 
 
@@ -16,12 +17,12 @@ public class HashTable {
     Object[] dado;
     int tamanho;
     int usado;
-    int pmt; // primo < tamanho
+    int primoMaior; // primo < tamanho
 
     public HashTable(int tamanho){
         this.tamanho = encontrar_pMt(tamanho);
         this.usado = 0;
-        this.pmt = encontrar_pmt(this.tamanho);
+        this.primoMaior = encontrar_pmt(this.tamanho);
         this.dado = new Object[this.tamanho];
 
 
@@ -33,11 +34,11 @@ public class HashTable {
 
     private int  re_hash(Object o, int count){
 
-        return (count*(( func_indice(o) % this.tamanho-1)+this.pmt)); 
+        return (count*(( func_indice(o) % this.tamanho-1)+this.primoMaior)); 
 
     }
     private int func_indice(Object o) {
-        int x = (func_hash(o) * pmt + pmt) % tamanho;
+        int x = (func_hash(o) * primoMaior + primoMaior) % tamanho;
         if(x < 0) x = x*-1;
         return x;
     }
@@ -66,7 +67,7 @@ public class HashTable {
 
         this.dado = dadonovo;
         this.tamanho = novotamanho;
-        this.pmt = encontrar_pmt(novotamanho);
+        this.primoMaior = encontrar_pmt(novotamanho);
         this.usado = 0;
 
         for (Object i : dadovelho) {
