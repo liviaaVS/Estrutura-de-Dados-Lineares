@@ -13,7 +13,7 @@ public interface Heap {
     public boolean isRoot(Node no) throws HeapVaziaExcecao;
     public int depth(Node no) throws HeapVaziaExcecao; // retorna a profundidade de um nó -> profundidade é quantos nós até chegar a raiz
     public int replace(Node no, Object o) throws HeapVaziaExcecao; // Altera o objeto armazenado em um Nó e retorna o valor que foi removido
-    public Object upHeap(Node no);
+    public Node upHeap(int k, Object o);
     public Object downHeap(Node no);
-    public void heapOrder(int fator); // o fator determina se a chave nos pais é <= a dos filhos ou >= a dos filhos
+    public Node heapOrder(Node no); // o fator determina se a chave nos pais é <= a dos filhos ou >= a dos filhos
 }
