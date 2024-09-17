@@ -1,9 +1,13 @@
 package Heap_Node;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
 
-class HeapNode implements Heap{
-    public  Node root = null;
-    public  Node last = null;
+class HeapNode implements Heap {
+    public Node root = null;
+    public Node last = null;
     public int size = 0;
+
     @Override
     public int size() {
         return this.size;
@@ -15,36 +19,13 @@ class HeapNode implements Heap{
     }
 
     @Override
-    public int height() throws HeapVaziaExcecao {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Object elements() throws HeapVaziaExcecao {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Object nos() throws HeapVaziaExcecao {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
     public Node root() throws HeapVaziaExcecao {
         return this.root;
     }
+
     @Override
     public boolean isRoot(Node no) throws HeapVaziaExcecao {
         return this.root == no;
-    }
-    @Override
-    public Node parent(Node no) throws HeapVaziaExcecao {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
-
-    @Override
-    public Object children(Node no) throws HeapVaziaExcecao {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -53,11 +34,9 @@ class HeapNode implements Heap{
     }
 
     @Override
-    public Node heapOrder(Node no) {
-       
-        if( no.getPai() !=null){
+    public Node upHeap(Node no) {
+        if (no.getPai() != null) {
             Node current = no.getPai();
-        
             while (current != null && no.getKey() < current.getKey()) {
                 swap(no, current);
                 no = current;
@@ -66,107 +45,134 @@ class HeapNode implements Heap{
         }
         return no;
     }
-    
-    
+
     private void swap(Node no1, Node no2) {
         int tempKey = no1.getKey();
         no1.setKey(no2.getKey());
         no2.setKey(tempKey);
-    
+
         Object tempElement = no1.getElement();
         no1.setElement(no2.getElement());
         no2.setElement(tempElement);
     }
-    private Node upLast(Node no) {
-        Node new_last = new Node();
-        
-        // Primeira verificação para garantir que o nó não é a raiz ou está na posição correta
-        while (!isRoot(no) && no.getPai().getFilhoE() == no) { 
-            no = no.getPai();
-            System.out.println(no.key);  // Apenas para depuração
+
+    private Node findLast() {
+        if (root() == null) {
+            return null; 
         }
-        
-        // Caso o nó seja a raiz
-        if (isRoot(no)) {
-            if (no.getFilhoE() == null) {
-                // Insere o novo nó à esquerda
-                new_last.setPai(no);
-                no.setFilhoE(new_last);
-            } else if (no.getFilhoD() == null) {
-                // Insere o novo nó à direita
-                new_last.setPai(no);
-                no.setFilhoD(new_last);
+        Queue<Node> fila = new LinkedList<>();
+        fila.add(root());
+        while (!fila.isEmpty()) {
+            Node atual = fila.poll();
+            if (atual.getFilhoE() == null) {
+                return atual; 
             } else {
-                // Desce até o nó externo à esquerda e insere o novo nó
-                while (!isExternal(no)) {
-                    no = no.getFilhoE();
-                }
-                new_last.setPai(no);
-                no.setFilhoE(new_last);
+                fila.add(atual.getFilhoE());
             }
-            this.last = new_last;
-            return this.last;
-        }
-        
-        // Caso o nó tenha um pai e seja o filho à esquerda
-        if (no.getPai() != null && no.getPai().getFilhoE() == no) {
-            no = no.getPai();
-            if (no.getFilhoD() == null) {
-                // Insere o novo nó à direita
-                new_last.setPai(no);
-                no.setFilhoD(new_last);
+            if (atual.getFilhoD() == null) {
+                return atual;
             } else {
-                // Desce até o nó externo à esquerda e insere o novo nó
-                while (!isExternal(no)) {
-                    no = no.getFilhoE();
-                }
-                new_last.setPai(no);
-                no.setFilhoE(new_last);
+                fila.add(atual.getFilhoD());
             }
-            this.last = new_last;
         }
-        
-        return this.last;  
+        return null;
     }
-    
+
     @Override
-    public Node upHeap(int k, Object o) {
-        // Caso a heap esteja vazia, criamos a raiz
-        Node no = new Node();
-        if (isEmpty()) {
-            Node rt = new Node(o, null, k);
-            this.root = rt;
-            root.setFilhoE(no);
-            upLast(this.root);
-            this.size = 1;  // Atualiza o tamanho da heap
-            return rt;
+    public Node insert(int k, Object o) {
+        Node novoNo = new Node(o, null, k);
+        if (root() == null) {
+            this.root = novoNo;
+            this.last = novoNo;
+            return this.root;
         } else {
-            this.size++; 
-            this.last = upLast(this.last);
-            this.last.setKey(k);
-            this.last.setElement(o);
-            heapOrder(last);
-          
-            return no ;  
+            Node paiDoNovoNo = findLast();
+            if (paiDoNovoNo.getFilhoE() == null) {
+                paiDoNovoNo.setFilhoE(novoNo);
+            } else {
+                paiDoNovoNo.setFilhoD(novoNo);
+            }
+            novoNo.setPai(paiDoNovoNo);
+            this.last = novoNo;
+            upHeap(novoNo);
+            return novoNo;
         }
     }
+
     public void printTree(Node n, String prefix, boolean isLeft) {
         if (n != null) {
-            // Imprime o nó atual (com prefixo)
             System.out.println(prefix + (isLeft ? "├── " : "└── ") + n.getKey());
-    
-            // Recursão para o filho esquerdo e direito, ajustando o prefixo
             printTree(n.getFilhoE(), prefix + (isLeft ? "│   " : "    "), true);
             printTree(n.getFilhoD(), prefix + (isLeft ? "│   " : "    "), false);
         }
     }
-    
-    public  void Emordem(Node n) {
+
+    public void Emordem(Node n) {
         if (n != null) {
-            Emordem(n.getFilhoE());  
-            System.out.println(n.getKey());        
-            Emordem(n.getFilhoD());  
+            Emordem(n.getFilhoE());
+            System.out.println(n.getKey());
+            Emordem(n.getFilhoD());
         }
+    }
+
+    @Override
+    public int height() throws HeapVaziaExcecao {
+        return heightRec(root());
+    }
+
+    private int heightRec(Node no) {
+        if (no == null) {
+            return -1;
+        }
+        int altura_direita = heightRec(no.filhoD);
+        int altura_esquerda = heightRec(no.filhoE);
+        return 1 + Math.max(altura_direita, altura_esquerda);
+    }
+
+    @Override
+    public ArrayList<Object> elements() throws HeapVaziaExcecao {
+        ArrayList<Object> elementos = new ArrayList<>();
+        if (root != null) {
+            Queue<Node> fila = new LinkedList<>();
+            fila.add(root);
+            while (!fila.isEmpty()) {
+                Node atual = fila.poll();
+                elementos.add(atual.getElement());
+                if (atual.getFilhoE() != null) fila.add(atual.getFilhoE());
+                if (atual.getFilhoD() != null) fila.add(atual.getFilhoD());
+            }
+        }
+        return elementos;
+    }
+
+    @Override
+    public Node parent(Node no) throws HeapVaziaExcecao {
+        return no.getPai();
+    }
+
+    @Override
+    public boolean isInternal(Node no) throws HeapVaziaExcecao {
+        return no.getFilhoE() != null || no.getFilhoD() != null;
+    }
+
+    @Override
+    public int depth(Node no) {
+        if (isRoot(no)) {
+            return 0;
+        }
+        return 1 + depth(no.getPai());
+    }
+
+    @Override
+    public Object replace(Node no, Object o) throws HeapVaziaExcecao {
+        Object oldElement = no.getElement();
+        no.setElement(o);
+        return oldElement;
+    }
+
+    @Override
+    public Node removeMin() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
@@ -174,7 +180,32 @@ class HeapNode implements Heap{
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
- 
-
+    @Override
+    public ArrayList<Node> nos() throws HeapVaziaExcecao {
+        ArrayList<Node> listaDeNos = new ArrayList<>();
+        if (root != null) {
+            Queue<Node> fila = new LinkedList<>();
+            fila.add(root);
+            while (!fila.isEmpty()) {
+                Node atual = fila.poll();
+                listaDeNos.add(atual);
+                if (atual.getFilhoE() != null) fila.add(atual.getFilhoE());
+                if (atual.getFilhoD() != null) fila.add(atual.getFilhoD());
+            }
+        }
+        return listaDeNos;
+    }
+    
+    @Override
+    public ArrayList<Node> children(Node no) throws HeapVaziaExcecao {
+        ArrayList<Node> filhos = new ArrayList<>();
+        if (no.getFilhoE() != null) {
+            filhos.add(no.getFilhoE());
+        }
+        if (no.getFilhoD() != null) {
+            filhos.add(no.getFilhoD());
+        }
+        return filhos;
+    }
+    
 }
-

@@ -17,6 +17,9 @@ public class Arvore {
         public Node filhoD = null;
         public Node filhoE =  null;
         public Node pai =  null;
+        public Node(Object value) {
+            this.value = value;
+        }
         public Object getValue() {
             return value;
         }
@@ -106,7 +109,6 @@ public class Arvore {
         Emordem(raiz, array);
         return array;
     }
-
 
 
 }
