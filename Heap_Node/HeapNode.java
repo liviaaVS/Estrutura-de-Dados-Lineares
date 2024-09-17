@@ -79,6 +79,40 @@ class HeapNode implements Heap {
        
     }
 
+    private Node findLastRemove(Node no) { 
+
+        while(!isRoot(no) && no.getPai().getFilhoD() != no){
+            no = no.getPai();
+        }
+        if(isRoot(no)){
+            if(isExternal(no))
+                return no;
+
+            else{
+                while(no.getFilhoD() != null){
+                    no = no.getFilhoD();
+                }
+                return no;
+            }    
+           
+        }
+
+        if(no.getPai().getFilhoE() != null){
+            no = no.getPai().getFilhoE();
+            while(no.getFilhoD() != null){
+                no = no.getFilhoD();
+            }
+
+            return no;
+        }else{
+            return no.getPai();
+        }
+        // para cima ate achar um filho direito ou o a raiz
+        // caso afirmativo vai para o filho esquerdo
+        // no filho direito desce ate achar um no folha PELA DIREITA
+       
+    }
+
     private Node fLast(Node no) { // O(log(n))
         while(!isRoot(no) && no.getPai().getFilhoE() != no){
             no = no.getPai();
@@ -106,13 +140,13 @@ class HeapNode implements Heap {
         }else{
             return no.getPai();
         }
-        // para cima ate achar um filho esquerdo ou o a raiz
-        // caso afirmativo vai para o filho direito
+        // para cima ate achar um filho direito ou o a raiz
+        // caso afirmativo vai para o filho esquerdo
         // no filho direito desce ate achar um no folha
     }
 
     @Override
-    public Node insert(int k, Object o) {
+    public Node insert(int k, Object o) { // O(log(n)) melhor caso O(1)
         Node novoNo = new Node(o, null, k);
         if (isEmpty()) {
             this.root = novoNo;
@@ -134,6 +168,38 @@ class HeapNode implements Heap {
         }
     }
 
+    @Override
+    public Node removeMin() {
+        if (isEmpty()) {
+          throw new  HeapVaziaExcecao("Não é possível remover um elemento de uma heap vazia");
+        } else {
+            if(size() == 1){
+                Node no = root();
+                this.root = null;
+                this.size=0;
+                return no;
+            }else{
+                Node old_root = new Node();
+                old_root.setKey(root().getKey());
+                this.root.setKey(this.last.getKey());
+                this.root.setElement(this.last.getElement());
+                Node old_last = this.last;
+                this.last  =  findLastRemove(this.last);    
+                downHeap(root());
+                this.size--;
+                if (old_last.getPai().getFilhoE() == old_last) {
+                    // Se old_last é o filho da esquerda, exclua o filho da esquerda
+                    old_last.getPai().setFilhoE(null);
+                } else if (old_last.getPai().getFilhoD() == old_last) {
+                    // Se old_last é o filho da direita, exclua o filho da direita
+                    old_last.getPai().setFilhoD(null);
+                }
+
+                return old_root;
+            }
+           
+        }
+    }
     public void printTree(Node n, String prefix, boolean isLeft) {
         if (n != null) {
             System.out.println(prefix + (isLeft ? "├── " : "└── ") + n.getKey());
@@ -205,14 +271,39 @@ class HeapNode implements Heap {
         return oldElement;
     }
 
-    @Override
-    public Node removeMin() {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
+   
 
     @Override
-    public Object downHeap(Node no) {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public Node downHeap(Node no) {
+        // Se o nó for externo (ou seja, uma folha), não há necessidade de ajustar
+        if (isExternal(no)) return no;
+        
+        // Se o nó tem dois filhos, vamos compará-los
+        if (children(no).size() == 2) {
+            Node filhoEsquerdo = no.getFilhoE();
+            Node filhoDireito = no.getFilhoD();
+            
+            // Identificar o filho com a menor chave
+            Node menorFilho = (filhoEsquerdo.getKey() < filhoDireito.getKey()) ? filhoEsquerdo : filhoDireito;
+            
+            // Se o menor filho for menor que o pai, troca de lugar com o pai
+            if (menorFilho.getKey() < no.getKey()) {
+                swap(no, menorFilho);
+                // Continuar a operação downHeap recursivamente no filho
+                downHeap(menorFilho);
+            }
+        } else if (children(no).size() == 1) { // Se o nó tem apenas um filho
+            Node filhoEsquerdo = no.getFilhoE();
+            
+            // Verificar se o filho esquerdo é menor que o nó atual (pai)
+            if (filhoEsquerdo.getKey() < no.getKey()) {
+                swap(no, filhoEsquerdo);
+                downHeap(filhoEsquerdo);
+            }
+        }
+    
+        // Retornar o nó ajustado
+        return no;
     }
 
     @Override
