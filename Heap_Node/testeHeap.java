@@ -14,7 +14,6 @@ public class testeHeap {
         heap.printTree(heap.root(), "", false);
         heap.Emordem(heap.root());
 
-
     }
     
 }

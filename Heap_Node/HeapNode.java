@@ -56,7 +56,7 @@ class HeapNode implements Heap {
         no2.setElement(tempElement);
     }
 
-    private Node findLast() {
+    private Node findLast() { // O(nlog(n))
         if (root() == null) {
             return null; 
         }
@@ -76,17 +76,52 @@ class HeapNode implements Heap {
             }
         }
         return null;
+       
+    }
+
+    private Node fLast(Node no) { // O(log(n))
+        while(!isRoot(no) && no.getPai().getFilhoE() != no){
+            no = no.getPai();
+        }
+        if(isRoot(no)){
+            if(isExternal(no))
+                return no;
+
+            else{
+                while(no.getFilhoE() != null){
+                    no = no.getFilhoE();
+                }
+                return no;
+            }    
+           
+        }
+
+        if(no.getPai().getFilhoD() != null){
+            no = no.getPai().getFilhoD();
+            while(no.getFilhoE() != null){
+                no = no.getFilhoE();
+            }
+
+            return no;
+        }else{
+            return no.getPai();
+        }
+        // para cima ate achar um filho esquerdo ou o a raiz
+        // caso afirmativo vai para o filho direito
+        // no filho direito desce ate achar um no folha
     }
 
     @Override
     public Node insert(int k, Object o) {
         Node novoNo = new Node(o, null, k);
-        if (root() == null) {
+        if (isEmpty()) {
             this.root = novoNo;
             this.last = novoNo;
+            this.size++;
             return this.root;
         } else {
-            Node paiDoNovoNo = findLast();
+            this.size++;
+            Node paiDoNovoNo = fLast(this.last);
             if (paiDoNovoNo.getFilhoE() == null) {
                 paiDoNovoNo.setFilhoE(novoNo);
             } else {
