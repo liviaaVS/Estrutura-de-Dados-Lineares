@@ -9,6 +9,8 @@ public class HashTableTest {
         hashTable.inserir(1);
         hashTable.inserir(1);
         hashTable.printlista();
+        hashTable.removerchave(1);
+        hashTable.printlista();
         System.out.println("Todos os testes passaram!");
     }
 }
