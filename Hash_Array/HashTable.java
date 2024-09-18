@@ -16,13 +16,13 @@ public class HashTable {
    
     Object[] dado;
     int tamanho;
-    int usado;
-    int primoMaior; // primo < tamanho
+    int size;
+    int primoMenor; // primo < tamanho
 
     public HashTable(int tamanho){
         this.tamanho = encontrar_pMt(tamanho);
-        this.usado = 0;
-        this.primoMaior = encontrar_pmt(this.tamanho);
+        this.size = 0;
+        this.primoMenor = encontrar_pmt(this.tamanho);
         this.dado = new Object[this.tamanho];
 
 
@@ -32,14 +32,13 @@ public class HashTable {
         return o.hashCode();
     }
 
-    private int  re_hash(Object o, int count){
+    private int  hashDuplo(Object o, int count){
 
-        return (count*(( func_indice(o) % this.tamanho-1)+this.primoMaior)); 
+        return (count*(( calcIndice(o) % this.tamanho-1)+this.primoMenor)); 
 
     }
-    private int func_indice(Object o) {
-        int x = (func_hash(o) * primoMaior + primoMaior) % tamanho;
-        if(x < 0) x = x*-1;
+    private int calcIndice(Object o) {
+        int x = (func_hash(o) * primoMenor + primoMenor) % tamanho;
         return x;
     }
 
@@ -52,12 +51,14 @@ public class HashTable {
     }
 
     private int encontrar_pmt(int i) {
-        while (!ehprimo(i--));
+        while (!ehprimo(i--)){
+        }
         return i;
     }
 
     private int encontrar_pMt(int i) {
-        while (!ehprimo(i++));
+        while (!ehprimo(i++)){
+        }
         return i;
     }
 
@@ -67,8 +68,8 @@ public class HashTable {
 
         this.dado = dadonovo;
         this.tamanho = novotamanho;
-        this.primoMaior = encontrar_pmt(novotamanho);
-        this.usado = 0;
+        this.primoMenor = encontrar_pmt(novotamanho);
+        this.size = 0;
 
         for (Object i : dadovelho) {
             if(i != null)
@@ -77,10 +78,10 @@ public class HashTable {
     }
 
     public int encontrarchave(Object obj) {
-        int indice = func_indice(obj);
+        int indice = calcIndice(obj);
         int count = 0;
         while (dado[indice] != obj)
-            indice = (indice + re_hash(obj, count++)) % tamanho;
+            indice = (indice + hashDuplo(obj, count++)) % tamanho;
         
         if (count == tamanho + 1)
             throw new  EDLVazioExcecao("Não existe esse elemento");
@@ -95,23 +96,22 @@ public class HashTable {
     }
 
     public void inserir(Object o) {
-        usado++;
-        if (usado >= tamanho/2) {
+        size++;
+        if (size >= tamanho/2) {
             mudartamanho(encontrar_pMt(tamanho*2));
         }
         
-        int indice = func_indice(o);
-        int count =0;
-        while (dado[indice] != null) {
-            indice = (indice + re_hash(o, count++)) % tamanho;
+        int indice = calcIndice(o);
+        int count=0;
+        while (dado[indice] != null ) {
+            indice = (indice + hashDuplo(o, count++)) % tamanho;
         }
         
-        if (dado[indice] == null || dado[indice] == null) {
+        if (dado[indice] == null) {
             dado[indice] = o;
-        }
-        
-        System.out.println("'" + o + "' : " + func_indice(o));
-        
+            System.out.println("'" + o + "' : " + indice);
+
+        }        
     }
     
     public Object removerobj(Object obj) {
@@ -119,7 +119,7 @@ public class HashTable {
     }
 
     public Object removerchave(int chave) {
-        usado--;
+        size--;
         Object a = null;
         if (chave < tamanho) {
             Object x = dado[chave];
