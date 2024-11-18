@@ -1,8 +1,4 @@
-
 import java.util.Array;
-
-
-
 
 public class Arvore {
 
