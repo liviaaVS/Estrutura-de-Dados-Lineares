@@ -127,6 +127,8 @@ public class avl {
 
     }
 
+   
+
 
     public Node rotacaoSE(Node no) {
         Node sucessor = no.getFilhoD()  ; // 4
@@ -167,7 +169,6 @@ public class avl {
 
         no.setFB(FB_NOVO_B);
         sucessor.setFB(FB_NOVO_A);
-
 
         return sucessor;
     }
@@ -218,7 +219,7 @@ public class avl {
     }
     
     public Node rotacaoDE(Node no){
-        Node filho = no.getFilhoE(); // pega o filho a esquerda para fazer uma rotação simples a direita
+        Node filho = no.getFilhoD(); // pega o filho a direita para fazer uma rotação simples a direita
         rotacaoSD(filho);
         return rotacaoSE(no); // pega o pai do filho a esquerda e faz uma rotação simples a esquerda
 
@@ -304,7 +305,7 @@ public class avl {
     public void mostrarArvore(ArrayList<Node> nodes, avl arvore) {
         int altura = height(arvore.raiz) + 1;
 
-        Node[][] matriz = new Node[altura][this.size];
+        Node[][] matriz = new Node[altura][size()];
     
         // Inicializar a matriz com espaços
         for (int i = 0; i < altura; i++) {
@@ -332,6 +333,45 @@ public class avl {
                     System.out.print("  ");
                 }else
                 if(matriz[i][j] == this.raiz)
+                System.out.print(matriz[i][j].getValue());
+                else
+                System.out.print(matriz[i][j].getValue() + " ");
+
+            }
+            System.out.println();
+        }
+    }
+
+    public void mostrarArvoreDev(ArrayList<Node> nodes, avl arvore) {
+        int altura = height(arvore.raiz) + 1;
+
+        Node[][] matriz = new Node[altura][size()];
+    
+        // Inicializar a matriz com espaços
+        for (int i = 0; i < altura; i++) {
+            for (int j = 0; j < this.size; j++) {
+                Node vazio = new Node();
+                vazio.setValue(" ");
+                matriz[i][j] = vazio;
+            }
+        }
+    
+        // Preencher a matriz com valores dos nós conforme a altura
+        for (int i = 0; i < altura; i++) {
+            for (int j = 0; j < this.size; j++) {
+                Node noAtual = nodes.get(j);
+                if (arvore.depth(noAtual) == i) {
+                    matriz[i][j] = noAtual;
+                }
+            }
+        }
+        // Exibir a matriz
+        for (int i = 0; i < altura; i++) {
+            for (int j = 0; j < this.size; j++) {
+                if(matriz[i][j].getValue() == " "){
+                    System.out.print("  ");
+                }else
+                if(matriz[i][j] == this.raiz)
                 System.out.print(matriz[i][j].getValue() + ":" + matriz[i][j].getFB() + " ");
                 else if(matriz[i][j].getPai().getFilhoE() == matriz[i][j])
                 System.out.print("E-" + matriz[i][j].getValue() + ":" + matriz[i][j].getFB() + " ");
@@ -343,4 +383,114 @@ public class avl {
         }
     }
 
+    // remoção: remove de qualquer lugar
+    // 3 casos podem ocorrer
+    // 1 - Remover um nó com nenhum filho
+    //    dizer ao pai daquele nó que ele não tem mais aquele filho
+    //    setendo o filho como null
+    // 2 - quando o nó tem 1 filho
+    //      Insere o filho do nó a ser removido como filho do pai do nó a ser removido
+    //      2 pai do 4 e 4 pai no 5, se quero remover o 4.
+    //      então o pai do 5 agora é o dois e o filho do dois agora é o 5.
+    // 3 - remover um nó com 2 filhos
+    //      remover a raiz. 
+    //      pega o nó sucessor (maior) e desse nó maior pega o nó menor possível
+    //      vai indo para os filhos a esquerda até encontrar um nó null, quando encontrar, o pai desse
+    //      nó null é o sucessor
+
+
+    public Node removeNo(Node no, Object value) {
+        Node aux = new Node();
+        aux.setValue(value);
+        remove(search(no, value));
+        return  aux;
+    }
+
+    public void remove(Node no) {
+        this.size--;
+        if (no.getFilhoE() == null && no.getFilhoD() == null) {
+                if (no == this.raiz) {
+                    this.raiz = null;
+                }
+              
+                if(no.getPai().getFilhoD().getValue() == no.getValue()){
+                    no.getPai().setFilhoD(null);
+                    no.getPai().setFB(no.getPai().getFB() + 1);
+
+                }else{
+                    no.getPai().setFilhoE(null);
+                    no.getPai().setFB(no.getPai().getFB() - 1);
+                }
+               
+        } else if (no.getFilhoE() == null) {
+                System.out.println("Nesse ");
+               
+                if (no == this.raiz) {
+                    this.raiz = no.getFilhoD();
+                    this.raiz.setPai(null);
+                } else  if(no.getPai().getFilhoD().getValue() == no.getValue()){
+                    no.getPai().setFilhoD(no.getFilhoD());
+                    no.getPai().setFB(no.getPai().getFB() + 1);
+
+                }else{
+                    no.getPai().setFilhoE(no.getFilhoD());
+                    no.getPai().setFB(no.getPai().getFB() - 1);
+                }
+
+            } else if (no.getFilhoD() == null) {
+                Node auxi = no;
+                no = no.getFilhoE();
+                no.setPai(auxi.getPai());
+                if (auxi == this.raiz) {
+                    this.raiz = no;
+                } else if(no.getPai().getFilhoD() == no){
+                    no.getPai().setFilhoD(no);
+                    no.getPai().setFB(no.getPai().getFB() + 1);
+
+                }else{
+                    no.getPai().setFilhoE(no);
+                    no.getPai().setFB(no.getPai().getFB() - 1);
+                }
+            } else {
+
+                Node auxi = no.getFilhoD();
+                while (auxi.getFilhoE() != null) {
+                    auxi = auxi.getFilhoE();
+                }
+                
+                no.setValue(auxi.getValue());
+                if(auxi.getPai().getFilhoD() == auxi){
+                    removeCalculateFB(auxi);
+                    auxi.getPai().setFilhoD(null);
+
+
+                }else{
+                    removeCalculateFB(auxi);
+                    auxi.getPai().setFilhoE(null);
+
+                }
+
+            }
+    }
+
+    public void removeCalculateFB(Node no){
+        if(isRoot(no)){
+            return;
+        }
+        
+        if(no == no.getPai().getFilhoE()){ 
+            no.getPai().setFB(no.getPai().getFB() - 1);
+        }else{
+            no.getPai().setFB(no.getPai().getFB() + 1);
+        }      
+
+        if(no.getPai().getFB() == -2 || no.getPai().getFB() == 2){ 
+            balancear(no.getPai());
+            return;
+        } else if(no.getPai().getFB() != 0){ 
+            return;
+        }
+
+    }
 }
+
