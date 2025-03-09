@@ -28,6 +28,6 @@ public class teste {
             System.out.println("Distância de 1 até " + (i+1) + ": " + dist[i]);
         }
 
-        System.out.println(grafo.isDirecionado());
+        System.out.println(grafo.isDirecionado() + " " +  grafo.oposto(0, 5));
     }
 }

@@ -109,6 +109,18 @@ class Grafo {
         System.out.println();
     }
 
+    public int  oposto(int v, int a){
+
+        if(!IsValid(v) || !IsValid(a)){
+            return -1;
+        }
+        if(!existeAresta(v, a)){
+            return -1;
+        }
+        return ListaArestas.get(a)[0] == v ? ListaArestas.get(a)[1] : ListaArestas.get(a)[0];
+    }
+
+
     // Implementação da busca em profundidade (DFS)
     public void dfs(int verticeInicial) {
         // Vetor para marcar os vértices visitados
